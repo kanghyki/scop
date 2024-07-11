@@ -12,7 +12,6 @@ class OpenGLUtil
 
     bool Init();
     bool IsWindowClose();
-    void PollEvent();
     void SwapBuffer();
     void Terminate();
 

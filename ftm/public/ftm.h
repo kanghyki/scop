@@ -8,5 +8,9 @@
 
 #include "mat4.h"
 #include "matrix.h"
+#include "matrix_func.h"
+#include "matrix_transform.h"
+
+#include "trigonometry.h"
 
 #endif

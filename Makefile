@@ -15,7 +15,7 @@ build:
 		&& ln -sf build/compile_commands.json .
 
 run:
-	@./build/bin/scop
+	@./build/bin/scop $(CONFIG)
 
 clean:
 	rm -rf ${BUILD_PATH}

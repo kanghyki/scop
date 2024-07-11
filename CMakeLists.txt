@@ -23,6 +23,7 @@ PUBLIC
 )
 
 list(APPEND libraries
+    ftm
     core
     opengl
 )

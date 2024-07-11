@@ -43,10 +43,10 @@ bool Program::Link(const std::vector<ShaderPtr> &shaders)
     glGetProgramiv(id_, GL_LINK_STATUS, &success);
     if (!success)
     {
-        char infoLog[512];
-        glGetProgramInfoLog(id_, 512, nullptr, infoLog);
-        logger::error << "ERROR::PROGRAM::LINKING_FAILED" << logger::endl;
-        logger::error << infoLog << logger::endl;
+        char info_log[512];
+        glGetProgramInfoLog(id_, 512, nullptr, info_log);
+        logger::error << "PROGRAM::LINK::FAILED_TO_LINK_SHADERS" << logger::endl;
+        logger::error << info_log << logger::endl;
     }
 
     return success;

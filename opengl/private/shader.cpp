@@ -30,53 +30,27 @@ bool Shader::LoadFile(const std::string &filename, GLenum shader_type)
     auto result = utility::LoadTextFile(filename);
     if (!result.has_value())
     {
+        logger::error << "SHADER::LOAD_FILE::FAILED_TO_LOAD_FILE: " << filename << logger::endl;
         return false;
     }
 
     std::string &code = result.value();
-    Preprocess(code, filename);
-    const char *pSource = code.c_str();
-    int32_t codeLength = code.length();
+    const char *src_ptr = code.c_str();
+    int32_t code_length = code.length();
 
     id_ = glCreateShader(shader_type);
-    glShaderSource(id_, 1, &pSource, &codeLength);
+    glShaderSource(id_, 1, &src_ptr, &code_length);
     glCompileShader(id_);
 
     int success = 0;
     glGetShaderiv(id_, GL_COMPILE_STATUS, &success);
     if (!success)
     {
-        char infoLog[512];
-        glGetShaderInfoLog(id_, 512, nullptr, infoLog);
-        logger::error << "ERROR::SHADER::COMPILATION_FAILED: " << filename << logger::endl;
-        logger::error << infoLog << logger::endl;
+        char info_log[512];
+        glGetShaderInfoLog(id_, 512, nullptr, info_log);
+        logger::error << "SHADER::LOAD_FILE::FAILED_TO_COMPILE_SHADER: " << filename << logger::endl;
+        logger::error << info_log << logger::endl;
     }
 
     return success;
-}
-
-void Shader::Preprocess(std::string &code, const std::string &filename) const
-{
-    const std::string &path = filename.substr(0, filename.find_last_of('/') + 1);
-    size_t pos;
-
-    while ((pos = code.find("#include")) != std::string::npos)
-    {
-        size_t end = code.find('\n', pos);
-        if (end == std::string::npos)
-        {
-            break;
-        }
-
-        const std::string &include = code.substr(pos, end - pos);
-
-        size_t f = include.find('"');
-        size_t e = include.find_last_not_of('"');
-        auto result = utility::LoadTextFile(path + include.substr(f + 1, e - f));
-        if (!result.has_value())
-        {
-            break;
-        }
-        code.replace(pos, end - pos, result.value());
-    }
 }

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-std::optional<std::string> LoadTextFile(const std::string &filename)
+std::optional<std::string> utility::LoadTextFile(const std::string &filename)
 {
     std::ifstream fin(filename);
     if (!fin.is_open())
@@ -15,7 +15,7 @@ std::optional<std::string> LoadTextFile(const std::string &filename)
     return text.str();
 }
 
-std::vector<std::string> Split(const std::string &s, const std::string &sep = " ")
+std::vector<std::string> utility::Split(const std::string &s, const std::string &sep = " ")
 {
     size_t pos = 0;
     size_t npos = 0;

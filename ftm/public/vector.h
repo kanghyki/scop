@@ -14,11 +14,11 @@ typedef vec<4, float> vec4;
 
 template <size_t S, typename T> vec<S, T> operator-(vec<S, T> const &v)
 {
-    vec<S, T> ret = v;
+    vec<S, T> ret;
 
     for (size_t i = 0; i < v.length(); ++i)
     {
-        ret[i] *= -1;
+        ret[i] = -v[i];
     }
 
     return ret;
@@ -70,7 +70,7 @@ template <typename T> vec<3, T> cross(vec<3, T> const &x, vec<3, T> const &y)
 
 template <size_t S, typename T> const T *value_ptr(const vec<S, T> &v)
 {
-    return &v.x;
+    return &(v.x);
 }
 
 } // namespace ftm

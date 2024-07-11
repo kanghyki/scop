@@ -20,7 +20,7 @@ template <typename T> struct vec<2, T>
         };
     };
 
-    vec() : x(0), y(0)
+    vec() : x(T(0)), y(T(0))
     {
     }
 

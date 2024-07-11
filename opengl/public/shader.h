@@ -23,7 +23,6 @@ class Shader
     Shader &operator=(const Shader &);
 
     bool LoadFile(const std::string &filename, GLenum shader_type);
-    void Preprocess(std::string &code, const std::string &filename) const;
 
     uint32_t id_;
 };

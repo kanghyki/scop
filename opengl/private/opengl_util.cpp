@@ -1,10 +1,19 @@
+#include "input_manager.h"
 #include "logger.h"
 #include "opengl_util.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-    logger::info << "Framebuffer size changed : " << width << ", " << height << logger::endl;
+    logger::info << "::FRAMEBUFFER_SIZE_CALLBACK:: " << width << "x" << height << logger::endl;
     glViewport(0, 0, width, height);
+}
+
+void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+#ifdef EDITOR
+    ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+#endif
+    InputManager::GetInstance()->UpdateKey(key, action);
 }
 
 OpenGLUtil *OpenGLUtil::instance_ = nullptr;
@@ -32,7 +41,7 @@ bool OpenGLUtil::Init()
     {
         const char *desc = nullptr;
         glfwGetError(&desc);
-        logger::error << "failed to initialize glfw: " << desc << logger::endl;
+        logger::error << "OPENGL_UTIL::INIT::FAILED_TO_INIT_GLFW: " << desc << logger::endl;
         return false;
     }
 
@@ -46,7 +55,7 @@ bool OpenGLUtil::Init()
     glfw_window_ = glfwCreateWindow(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, WINDOW_NAME, nullptr, nullptr);
     if (!glfw_window_)
     {
-        logger::error << "failed to create glfw window" << logger::endl;
+        logger::error << "OPENGL_UTIL::INIT::FAILED_TO_CREATE_WINDOW" << logger::endl;
         Terminate();
         return false;
     }
@@ -54,13 +63,14 @@ bool OpenGLUtil::Init()
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        logger::error << "failed to initialize GLAD" << logger::endl;
+        logger::error << "OPENGL_UTIL::INIT::FAILED_TO_INIT_GLAD" << logger::endl;
         Terminate();
         return false;
     }
     glViewport(0, 0, WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT);
 
     glfwSetFramebufferSizeCallback(glfw_window_, framebuffer_size_callback);
+    glfwSetKeyCallback(glfw_window_, KeyCallback);
 
     return true;
 }
@@ -73,11 +83,6 @@ bool OpenGLUtil::IsWindowClose()
 void OpenGLUtil::SwapBuffer()
 {
     glfwSwapBuffers(glfw_window_);
-}
-
-void OpenGLUtil::PollEvent()
-{
-    glfwPollEvents();
 }
 
 void OpenGLUtil::Terminate()

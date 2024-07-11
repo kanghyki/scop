@@ -20,7 +20,7 @@ template <typename T> struct vec<4, T>
         };
     };
 
-    vec() : x(0), y(0), z(0), w(0)
+    vec() : x(T(0)), y(T(0)), z(T(0)), w(T(0))
     {
     }
 
@@ -108,7 +108,7 @@ template <typename T> vec<4, T> operator*(vec<4, T> const &v, T const &scalar)
 
 template <typename T> vec<4, T> operator*(T const &scalar, vec<4, T> const &v)
 {
-    return vec<4, T>{v.x * scalar, v.y * scalar, v.z * scalar, v.w * scalar};
+    return v * scalar;
 }
 
 template <typename T> vec<4, T> operator/(vec<4, T> const &v, T const &scalar)
@@ -118,7 +118,7 @@ template <typename T> vec<4, T> operator/(vec<4, T> const &v, T const &scalar)
 
 template <typename T> vec<4, T> operator/(T const &scalar, vec<4, T> const &v)
 {
-    return vec<4, T>{v.x / scalar, v.y / scalar, v.z / scalar, v.w / scalar};
+    return v / scalar;
 }
 }; // namespace ftm
 

@@ -2,3 +2,6 @@
 tags
 build
 compile_commands.json
+resource
+TODO.md
+*.scop

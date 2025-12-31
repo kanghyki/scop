@@ -2,8 +2,8 @@
 #include "obj_loader.h"
 #include <fstream>
 #include <sstream>
-
-bool ParseObject(std::ifstream &in_ifs, Object &out_obj);
+#include <algorithm>
+#include <cmath>
 
 bool LoadObject(const std::string &in_filepath, Object &out_obj)
 {
@@ -21,39 +21,24 @@ bool LoadObject(const std::string &in_filepath, Object &out_obj)
         return false;
     }
 
+    ftm::vec3 maxv, minv;
+
     std::string line;
     while (std::getline(ifs, line))
     {
         std::stringstream ss(line);
         std::string head;
         ss >> head;
+
         if (head == "#")
         {
             continue;
         }
         else if (head == "o")
         {
-            std::string name;
-            ss >> name;
-            out_obj.name_ = name;
-            ParseObject(ifs, out_obj);
+            ss >> out_obj.name_;
         }
-    }
-    ifs.close();
-
-    return true;
-}
-
-bool ParseObject(std::ifstream &in_ifs, Object &out_obj)
-{
-    ftm::vec3 maxv, minv;
-    std::string line;
-    while (getline(in_ifs, line))
-    {
-        std::stringstream ss(line);
-        std::string head;
-        ss >> head;
-        if (head == "v")
+        else if (head == "v")
         {
             ftm::vec3 v;
             if (ss >> v.x >> v.y >> v.z)
@@ -90,7 +75,6 @@ bool ParseObject(std::ifstream &in_ifs, Object &out_obj)
         else if (head == "f")
         {
             std::vector<uint32_t> temp[3];
-            std::string face;
             while (!ss.eof())
             {
                 ss >> std::ws;
@@ -135,12 +119,11 @@ bool ParseObject(std::ifstream &in_ifs, Object &out_obj)
         {
             continue;
         }
-        else
-        {
-            break;
-        }
+        // Unknown tags are ignored
     }
+    ifs.close();
 
+    // Post-processing
     if (!out_obj.vpos_.empty())
     {
         out_obj.center_ = out_obj.center_ / (float)out_obj.vpos_.size();
@@ -178,7 +161,9 @@ bool ParseObject(std::ifstream &in_ifs, Object &out_obj)
         {
             auto CalcUV = [&](const ftm::vec3 &v) -> ftm::vec2 {
                 ftm::vec2 uv;
+                // Basic spherical mapping
                 uv.x = (atan2(v.z, v.x) / M_PI + 1.0f) / 2.0f;
+                // Linear mapping based on Y bounds
                 uv.y = (v.y - minv.y) / (maxv.y - minv.y);
 
                 return uv;

@@ -84,6 +84,8 @@ You can create custom configuration files. The format expects `key=value` pairs:
 ```ini
 VS=opengl/shader/glsl.vs       # Path to Vertex Shader
 FS=opengl/shader/glsl.fs       # Path to Fragment Shader
-TEX=resource/tga/table.tga     # Path to Texture (TGA)
+TEX=resource/tga/table.tga     # [Optional] Path to Texture (TGA)
 OBJ=resource/teapot.obj        # Path to Wavefront OBJ file
 ```
+
+If `TEX` is missing or the file cannot be loaded, the application will start in the default color mode.

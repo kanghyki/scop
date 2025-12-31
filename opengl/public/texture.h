@@ -57,6 +57,7 @@ class Texture : public BaseTexture
 {
   public:
     static TexturePtr Load(const std::string &filename);
+    static TexturePtr CreateFromData(const uint8_t *data, int width, int height, int channel_count);
 
     ~Texture();
 

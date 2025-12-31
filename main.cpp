@@ -68,12 +68,22 @@ int main(int argc, char **argv)
     {
         return 1;
     }
-    TexturePtr tex = Texture::Load(config["TEX"]);
+    TexturePtr tex = nullptr;
+    if (config.find("TEX") != config.end())
+    {
+        tex = Texture::Load(config["TEX"]);
+        if (!tex)
+        {
+            logger::warning << "::MAIN::FAILED_TO_LOAD_TEXTURE: " << config["TEX"] << logger::endl;
+        }
+    }
+    
     if (!tex)
     {
-        return 1;
+        logger::info << "::MAIN::USING_DEFAULT_WHITE_TEXTURE" << logger::endl;
+        uint8_t white_pixel[] = {255, 255, 255, 255};
+        tex = Texture::CreateFromData(white_pixel, 1, 1, 4);
     }
-    // tex->SetWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
 
     ftm::vec3 cam_pos(0.0f, 0.0f, 3.5f);
     ftm::vec3 obj_pos(0.0f, 0.0f, 0.0f);
@@ -145,6 +155,10 @@ int main(int argc, char **argv)
         auto view = ftm::lookAt(cam_pos, cam_pos + ftm::vec3(0.0f, 0.0f, 1.0f), ftm::vec3(0.0f, 1.0f, 0.0f));
         auto proj = ftm::perspective(ftm::radians(45.0f), 800.0f / 600.0f, 0.1f, 2000.0f);
         p->Use();
+        if (tex)
+        {
+            tex->Bind();
+        }
         p->SetUniform("view", view);
         p->SetUniform("proj", proj);
         p->SetUniform("model", ftm::translate(ftm::mat4(1.0f), obj_pos) *

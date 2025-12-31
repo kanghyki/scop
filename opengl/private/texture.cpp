@@ -124,6 +124,42 @@ TexturePtr Texture::Load(const std::string &filename)
     return texture;
 }
 
+TexturePtr Texture::CreateFromData(const uint8_t *data, int width, int height, int channel_count)
+{
+    auto texture = TexturePtr(new Texture());
+    texture->Bind();
+    texture->SetFilter(GL_NEAREST, GL_NEAREST);
+    texture->SetWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+
+    texture->width_ = width;
+    texture->height_ = height;
+    GLenum iformat = GL_RGBA;
+    GLenum format = GL_RGBA;
+    switch (channel_count)
+    {
+    case 1:
+        iformat = GL_RED;
+        format = GL_RED;
+        break;
+    case 3:
+        iformat = GL_RGB;
+        format = GL_RGB;
+        break;
+    case 4:
+        iformat = GL_RGBA;
+        format = GL_RGBA;
+        break;
+    default:
+        break;
+    }
+    texture->internal_format_ = iformat;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, iformat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    return texture;
+}
+
 void Texture::SetTextureFromImage(const Image *image)
 {
     width_ = image->width();

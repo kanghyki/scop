@@ -2,7 +2,7 @@
 
 **SCOP** is a lightweight OpenGL-based 3D object viewer. It allows users to load `.obj` files, apply textures, and interact with the model in a 3D space.
 
-## 🛠 Prerequisites & Environment
+## Prerequisites & Environment
 
 This project is designed to be built using **CMake** and **Make**.
 
@@ -17,7 +17,7 @@ This project is designed to be built using **CMake** and **Make**.
 - **CMake** (3.10 or higher)
 - **Make**
 
-## 🚀 Building the Project
+## Building the Project
 
 The project includes a `Makefile` that wraps the CMake build process for convenience.
 
@@ -41,7 +41,7 @@ The project includes a `Makefile` that wraps the CMake build process for conveni
     make re
     ```
 
-## 🎮 Running the Application
+## Running the Application
 
 The application requires a configuration file (`.scop`) to specify the shaders, texture, and 3D model.
 
@@ -64,7 +64,7 @@ Alternatively, you can run the executable directly from the `build/bin` director
 
 ---
 
-## 🕹 Controls
+## Controls
 
 | Key           | Action                                |
 | :------------ | :------------------------------------ |
@@ -77,7 +77,7 @@ Alternatively, you can run the executable directly from the `build/bin` director
 
 ---
 
-## ⚙️ Configuration File (.scop)
+## Configuration File (.scop)
 
 You can create custom configuration files. The format expects `key=value` pairs:
 
